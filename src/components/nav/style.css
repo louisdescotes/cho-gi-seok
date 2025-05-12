@@ -1,0 +1,5 @@
+@import "../../app/css/globals.css";
+
+.nav-actif {
+  background-color: var(--primary);
+}

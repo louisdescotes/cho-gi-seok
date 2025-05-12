@@ -1,0 +1,11 @@
+:root {
+  --background: #151414;
+  --white: #fafafa;
+  --grey: rgba(250, 250, 250, 0.4);
+
+  --primary: #e83829;
+}
+
+@theme {
+  --spacing-42: 2.625rem;
+}
