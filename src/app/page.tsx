@@ -8,8 +8,8 @@ export default function Home() {
   setPage("home");
 
   return (
-    <main>
-      <div className="flex max-w-xl mx-auto items-center">
+    <main className="relative h-screen w-full">
+      <div className="flex justify-center items-center h-full w-full max-w-xl mx-auto">
         <MainText korean="정보" align="">
           <p>
             Cho Gi-Seok est un photographe sud-coréen né en 1992 à Séoul. Il a

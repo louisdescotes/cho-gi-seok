@@ -1,4 +1,3 @@
-import Nav from "@/components/nav";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./css/globals.css";
@@ -20,8 +19,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${geistSans.variable} antialiased`}>
-        <Nav />
+      <body className={`${geistSans.variable} antialiased min-h-svh`}>
+        {/* <Header /> */}
         {children}
       </body>
     </html>
