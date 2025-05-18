@@ -1,3 +1,4 @@
+import Header from "@/components/nav/header";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./css/globals.css";
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={`${geistSans.variable} antialiased min-h-svh`}>
-        {/* <Header /> */}
+        <Header />
         {children}
       </body>
     </html>

@@ -34,7 +34,7 @@ const cards = [
     korean: "요즘에는",
   },
 ];
-export function collectionCanvas(canvas) {
+export function collectionCanvas(canvas, onUpdate) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -53,13 +53,13 @@ export function collectionCanvas(canvas) {
   const cardSpacing = 16;
 
   for (let i = 0; i < cards.length; i++) {
-    const geometry = new THREE.PlaneGeometry(13, 14);
+    const geometry = new THREE.PlaneGeometry(13, 16);
     const texture = new THREE.TextureLoader().load(cards[i].image);
     const material = new THREE.MeshBasicMaterial({ map: texture });
     const card = new THREE.Mesh(geometry, material);
 
     card.position.x = (i - cards.length / cards.length + 1) * cardSpacing;
-    card.position.y = 0;
+    card.position.y = 1;
 
     scene.add(card);
 
@@ -69,20 +69,18 @@ export function collectionCanvas(canvas) {
       const titleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
       const titleGeometry = new TextGeometry(cards[i].title, {
         font: font,
-        size: 1,
+        size: 0.6,
         depth: 0,
-        bevelOffset: 0,
       });
       const koreanMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
       const koreanGeometry = new TextGeometry(cards[i].korean, {
         font: font,
         size: 1,
         depth: 0,
-        bevelOffset: 0,
       });
 
       const titleMesh = new THREE.Mesh(titleGeometry, titleMaterial);
-      titleMesh.position.y = -8.5;
+      titleMesh.position.y = -8;
       titleMesh.position.x =
         (i - cards.length / cards.length + 1) * cardSpacing - 6.5;
       scene.add(titleMesh);
@@ -93,10 +91,18 @@ export function collectionCanvas(canvas) {
       scene.add(koreanMesh);
     });
 
+    const api = {
+      moveCamera: (x) => {
+        camera.position.x = x;
+      },
+    };
+
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
     animate();
+
+    if (onUpdate) onUpdate(api);
   }
 }
