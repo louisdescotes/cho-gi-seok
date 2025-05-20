@@ -55,6 +55,13 @@ export function collectionCanvas(canvas, onUpdate) {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   const interactives = [];
+  let hovered = null;
+
+  window.addEventListener("pointermove", onPointerMove, false);
+  function onPointerMove(e) {
+    mouse.x = (e.clientX / renderer.domElement.clientWidth) * 2 - 1;
+    mouse.y = -(e.clientY / renderer.domElement.clientHeight) * 2 + 1;
+  }
 
   window.addEventListener("pointerdown", onPointerDown, false);
   function onPointerDown(e) {
@@ -74,6 +81,7 @@ export function collectionCanvas(canvas, onUpdate) {
 
   for (let i = 0; i < cards.length; i++) {
     const cardGroup = new THREE.Group();
+
     cardGroup.userData.slug = cards[i].slug;
 
     const tex = new THREE.TextureLoader().load(cards[i].image);
@@ -136,6 +144,26 @@ export function collectionCanvas(canvas, onUpdate) {
 
   function animate() {
     requestAnimationFrame(animate);
+
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(interactives, true);
+
+    if (hits.length > 0) {
+      let target = hits[0].object;
+
+      while (target.parent && !target.userData.slug) {
+        target = target.parent;
+      }
+
+      if (hovered !== target) {
+        hovered = target;
+        document.body.style.cursor = "pointer";
+      }
+    } else {
+      hovered = null;
+      document.body.style.cursor = "default";
+    }
+
     renderer.render(scene, camera);
   }
   animate();

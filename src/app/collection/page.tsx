@@ -14,18 +14,22 @@ export default function Collection() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const lenis = new Lenis();
-
-  lenis.on("scroll", ScrollTrigger.update);
+  const [lenis, setLenis] = useState<Lenis | null>(null);
 
   const [threeApi, setThreeApi] = useState<{
     moveCamera: (x: number) => void;
   }>();
 
-  navStore.getState().setPage("collection");
+  useEffect(() => {
+    const l = new Lenis();
+    l.on("scroll", ScrollTrigger.update);
+    setLenis(l);
+  }, []);
+
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    navStore.getState().setPage("collection");
     collectionCanvas(canvasRef.current, setThreeApi);
 
     const resize = () => {
@@ -34,12 +38,13 @@ export default function Collection() {
       canvasRef.current.height = window.innerHeight;
       ScrollTrigger.refresh();
     };
+
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
 
   useGSAP(() => {
-    if (!wrapperRef.current || !trackRef.current || !threeApi) return;
+    if (!wrapperRef.current || !trackRef.current || !threeApi || !lenis) return;
 
     const sections = gsap.utils.toArray<HTMLElement>(".h-section");
     const totalWidth = sections.reduce((sum, el) => sum + el.offsetWidth, 0);
@@ -66,7 +71,7 @@ export default function Collection() {
         },
       },
     });
-  }, [threeApi]);
+  }, [threeApi, lenis]);
 
   return (
     <>
